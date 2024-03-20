@@ -1,0 +1,11 @@
+[Config]
+graphSourceType = "ADJACENCY_LIST" #ADJACENCY_LIST, ADJACENCY_MATRIX, INCIDENCE_MATRIX
+lineElementSeparator = " " #may be regex eg. `//s+`, Example for adj_list_graph uses ' ' (space), the others use '' (empty)
+graphSourceUri = "file:///Users/jakubuchman/Documents/jgraph_test/src/main/resources/pl/edu/agh/fis/juchman/graphvisualiser/adj_list_graph.txt" #URI of a graph file. if we want a file: file:///C:/a.txt On windows; file:///home/user/a.txt On Linux
+
+[Config.SceneSetup]
+title="SET THE TITLE IN THE CONFIG FILE" #Title of a window
+width = 800 #Dimensions of a window
+height = 800 # ^^
+radius = 300 #Graph is presented with its verticises on a circle, this is the radius of that circle
+displayAsDirectedGraph = false
