@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 
 # {arg1} {arg2}
-# arg1 = ilosc wierzholkow
+# arg1 = ilosc wierzcholkow
 # arg2 = stopien kazdego
 
 n = int(sys.argv[1])

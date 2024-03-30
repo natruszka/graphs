@@ -84,7 +84,7 @@ def randomize_edges(random_amount: int, sequence: list) -> nx.Graph:
         graph.add_edges_from((first_edge_new, second_edge_new))
     return graph
 
-test = [1, 3, 2, 3, 2, 4, 1]
-randomize_edges(1, test)
-print(check_if_degree_sequence([2, 2, 6, 4, 4, 6, 6]))
-print(create_graph_from_sequence([1, 3, 2, 3, 2, 4, 1]))
+# test = [1, 3, 2, 3, 2, 4, 1]
+# randomize_edges(1, test)
+# print(check_if_degree_sequence([2, 2, 6, 4, 4, 6, 6]))
+# print(create_graph_from_sequence([1, 3, 2, 3, 2, 4, 1]))
