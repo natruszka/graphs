@@ -27,7 +27,7 @@ tree_set = [{i+1} for i in range(len(graph))]
 edge_set = []
 
 
-for i in range(len(graph)-1):
+while len(tree_set) != 1:
   edges.sort(key=lambda x : x[1])
   direction = edges[0]
 
