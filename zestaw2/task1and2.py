@@ -6,6 +6,7 @@
 
 import networkx as nx
 import random
+import matplotlib.pyplot as plt    
 
 def check_if_degree_sequence(sequence: list) -> bool:
     #Sprawdzenie, czy suma stopni wierzchołków jest parzysta
@@ -67,6 +68,8 @@ def randomize_edges(random_amount: int, sequence: list) -> nx.Graph:
     if not check_if_degree_sequence(sequence):
         return None
     graph = create_graph_from_sequence(sequence)
+    nx.draw(graph, with_labels = True)
+    plt.show()
     for _ in range(random_amount):
         list_edges = list(graph.edges)
         # print(list_edges)
@@ -82,9 +85,11 @@ def randomize_edges(random_amount: int, sequence: list) -> nx.Graph:
             first_edge_new, second_edge_new = swap_nodes(first_edge, second_edge, list_edges)
         graph.remove_edges_from((first_edge, second_edge))
         graph.add_edges_from((first_edge_new, second_edge_new))
+    nx.draw(graph, with_labels = True)
+    plt.show()
     return graph
 
-# test = [1, 3, 2, 3, 2, 4, 1]
-# randomize_edges(1, test)
+# test = [4, 2, 2, 3, 2, 1, 4, 2, 2, 2, 2]
+# randomize_edges(10, test)
 # print(check_if_degree_sequence([2, 2, 6, 4, 4, 6, 6]))
 # print(create_graph_from_sequence([1, 3, 2, 3, 2, 4, 1]))

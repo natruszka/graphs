@@ -21,8 +21,12 @@ def init_DFS(graph: nx.Graph, visited: list):
         all_components.append(DFS(graph, node, visited, component))
     return [component for component in all_components if component] #remove empty components
 
-# all_components = init_DFS(t12.create_graph_from_sequence([1, 3, 2, 3, 2, 4, 1]), [])
-# print(all_components)
+def find_largest_component(graph: nx.Graph):
+    all_components = init_DFS(graph, [])
+    for component in all_components:
+        print(component)
+    print("Largest component: " + str(all_components.index(max(all_components, key=len))+1))
 
-# all_components = init_DFS(t12.create_graph_from_sequence([4, 4, 4, 4, 4, 2, 2]), [])
-# print(all_components)
+# find_largest_component(t12.create_graph_from_sequence([1, 3, 2, 3, 2, 4, 1]))
+
+# find_largest_component(t12.create_graph_from_sequence([4, 4, 4, 4, 4, 2, 2]))
