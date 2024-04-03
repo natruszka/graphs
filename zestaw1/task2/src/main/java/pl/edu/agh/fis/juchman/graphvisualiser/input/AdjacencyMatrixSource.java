@@ -1,8 +1,9 @@
 package pl.edu.agh.fis.juchman.graphvisualiser.input;
 
 import org.jgrapht.graph.DefaultEdge;
-import pl.edu.agh.fis.juchman.graphvisualiser.GraphHolder;
-import pl.edu.agh.fis.juchman.graphvisualiser.SimpleGraphHolder;
+import org.jgrapht.util.SupplierUtil;
+import pl.edu.agh.fis.juchman.graphvisualiser.graph.GraphHolder;
+import pl.edu.agh.fis.juchman.graphvisualiser.graph.SimpleGraphHolder;
 import pl.edu.agh.fis.juchman.graphvisualiser.configs.Config;
 
 import java.io.IOException;
@@ -11,13 +12,13 @@ import java.util.Scanner;
 
 class AdjacencyMatrixSource implements GraphSource<String, DefaultEdge>{
     private final Config config;
-    private final GraphHolder<String, DefaultEdge> graphHolder;
+    private final SimpleGraphHolder<String,DefaultEdge> graphHolder;
     private int vertexCount;
     private int edgeCount;
 
     public AdjacencyMatrixSource(Config config) {
         this.config = config;
-        this.graphHolder = new SimpleGraphHolder();
+        this.graphHolder = new SimpleGraphHolder<>(SupplierUtil.createStringSupplier(),SupplierUtil.createDefaultEdgeSupplier());
     }
 
     @Override ///TODO !!!this is an old and dumb approach, I was too lazy to rewrite it, in other inputs I use a nicer approach.

@@ -12,6 +12,7 @@ repositories {
 dependencies {
     implementation("org.jgrapht:jgrapht-core:1.5.2")
     implementation("org.jgrapht:jgrapht-ext:1.5.2")
+    implementation ("org.jgrapht:jgrapht-io:1.5.2")
     implementation("com.github.jgraph:jgraphx:v4.0.0")
     implementation("com.moandjiezana.toml:toml4j:0.7.2")
     implementation("com.google.guava:guava:33.1.0-jre")

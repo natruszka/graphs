@@ -2,8 +2,9 @@ package pl.edu.agh.fis.juchman.graphvisualiser.input;
 
 import com.google.common.io.Files;
 import org.jgrapht.graph.DefaultEdge;
-import pl.edu.agh.fis.juchman.graphvisualiser.GraphHolder;
-import pl.edu.agh.fis.juchman.graphvisualiser.SimpleGraphHolder;
+import org.jgrapht.util.SupplierUtil;
+import pl.edu.agh.fis.juchman.graphvisualiser.graph.GraphHolder;
+import pl.edu.agh.fis.juchman.graphvisualiser.graph.SimpleGraphHolder;
 import pl.edu.agh.fis.juchman.graphvisualiser.configs.Config;
 
 import java.io.IOException;
@@ -16,10 +17,10 @@ import java.util.stream.IntStream;
 class IncidenceMatrixSource implements GraphSource<String, DefaultEdge> {
 
     private final Config config;
-    private final GraphHolder<String, DefaultEdge> graphHolder;
+    private final SimpleGraphHolder<String,DefaultEdge> graphHolder;
     public IncidenceMatrixSource(Config config) {
         this.config = config;
-        this.graphHolder = new SimpleGraphHolder();
+        this.graphHolder = new SimpleGraphHolder<>(SupplierUtil.createStringSupplier(),SupplierUtil.createDefaultEdgeSupplier());
     }
 
     @Override

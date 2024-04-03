@@ -1,4 +1,4 @@
-package pl.edu.agh.fis.juchman.graphvisualiser;
+package pl.edu.agh.fis.juchman.graphvisualiser.graph;
 
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.ext.JGraphXAdapter;
