@@ -1,0 +1,10 @@
+graph{
+    "TEST A" -> b[color=red,penwidth=3.0, weight=1.2]; /// -> means it is directed
+    b -- c; /// it is undirected
+    d -> c[color=red,penwidth=3.0];
+    d -- e[weight=9];
+    e -- f[weight=12];
+    a -- d;
+    b -> d[color=red,penwidth=3.0];
+    c -- f[color=red,penwidth=3.0];
+}

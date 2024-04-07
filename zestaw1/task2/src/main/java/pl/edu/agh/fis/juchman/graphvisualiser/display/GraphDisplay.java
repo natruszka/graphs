@@ -7,7 +7,7 @@ import com.mxgraph.util.mxStyleUtils;
 import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultEdge;
 import java.util.Collection;
-import pl.edu.agh.fis.juchman.graphvisualiser.GraphHolder;
+import pl.edu.agh.fis.juchman.graphvisualiser.graph.GraphHolder;
 import pl.edu.agh.fis.juchman.graphvisualiser.configs.SceneSetup;
 
 import javax.swing.*;
@@ -24,9 +24,9 @@ public class GraphDisplay extends JFrame {
         super(sceneSetup.title());
     }
 
-    private void load(GraphHolder<String, DefaultEdge> graph){
+    private void load(GraphHolder<String,? extends DefaultEdge> graph){
 
-        JGraphXAdapter<String, DefaultEdge> jgxAdapter = graph.getJgraphxRepresentation();
+        JGraphXAdapter<String, ? extends DefaultEdge> jgxAdapter = graph.getJgraphxRepresentation();
         setPreferredSize(frameSize);
         mxGraphComponent component = new mxGraphComponent(jgxAdapter);
 
@@ -34,16 +34,13 @@ public class GraphDisplay extends JFrame {
             mxGraphModel graphModel  = (mxGraphModel)component.getGraph().getModel();
             Collection<Object> cells =  graphModel.getCells().values();
             mxStyleUtils.setCellStyles(component.getGraph().getModel(), cells.toArray(), mxConstants.STYLE_ENDARROW, mxConstants.NONE); // Disable arrows
-            for (Object cell : cells) {
-                if (component.getGraph().getModel().isEdge(cell)) {
-                    mxStyleUtils.setCellStyles(component.getGraph().getModel(), new Object[]{cell}, mxConstants.STYLE_NOLABEL, "1"); /// Disable edge labels
-                }
-            }
         }
         getContentPane().add(component);
         component.setConnectable(false);
         component.getGraph().setAllowDanglingEdges(false);
         mxCircleLayout layout = new mxCircleLayout(jgxAdapter);
+
+
 
         // center the circle
         layout.setX0((frameSize.width / 2.0) - radius);
@@ -52,7 +49,7 @@ public class GraphDisplay extends JFrame {
         layout.setMoveCircle(true);
         layout.execute(jgxAdapter.getDefaultParent());
     }
-    public static void display(SceneSetup sceneSetup, GraphHolder<String,DefaultEdge> graphHolder) {
+    public static void display(SceneSetup sceneSetup, GraphHolder<String,? extends DefaultEdge> graphHolder) {
         GraphDisplay.frameSize =  new Dimension(sceneSetup.width(), sceneSetup.height());
         GraphDisplay.radius = sceneSetup.radius();
         GraphDisplay.displayAsDirectedGraph = sceneSetup.displayAsDirectedGraph();
