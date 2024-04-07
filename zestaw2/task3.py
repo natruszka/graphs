@@ -22,11 +22,13 @@ def init_DFS(graph: nx.Graph, visited: list):
     return [component for component in all_components if component] #remove empty components
 
 def find_largest_component(graph: nx.Graph):
+    components = ""
+    i = 1
     all_components = init_DFS(graph, [])
     for component in all_components:
-        print(component)
-    print("Largest component: " + str(all_components.index(max(all_components, key=len))+1))
+        components=components + str(i) +" "
+        components= components + str(component) +"\n"
+        i+=1
+    components+="Największa spójna składowa: " + str(all_components.index(max(all_components, key=len))+1)
+    return components
 
-# find_largest_component(t12.create_graph_from_sequence([1, 3, 2, 3, 2, 4, 1]))
-
-# find_largest_component(t12.create_graph_from_sequence([4, 4, 4, 4, 4, 2, 2]))

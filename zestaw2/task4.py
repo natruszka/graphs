@@ -30,7 +30,7 @@ def find_euler_cycle(graph: nx.Graph, cycle: list, u: int = 1):
         if can_remove_edge(graph, u, v):
             cycle.append((u,v))
             graph.remove_edge(u, v)
-            # nx.draw(graph, with_labels = True)
+            # nx.draw_circular(graph, with_labels = True)
             # plt.show()
             cycle = find_euler_cycle(graph, cycle, v)
     return cycle
@@ -52,11 +52,11 @@ def check_if_eulerian_and_find_cycle(graph: nx.Graph):
         return find_euler_cycle(graph, [])
     return None
 
-graph = t12.create_graph_from_sequence([4, 4, 4, 4, 4, 2, 2])
-# nx.draw(graph, with_labels = True)
+# graph = t12.create_graph_from_sequence([4, 4, 4, 4, 4, 2, 2])
+# nx.draw_circular(graph, with_labels = True)
 # plt.show()
-print(is_euler_graph(graph))
-print(check_if_eulerian_and_find_cycle(graph))
-graph = generate_euler_graph(9)
-nx.draw(graph, with_labels = True)
-plt.show()
+# print(is_euler_graph(graph))
+# print(check_if_eulerian_and_find_cycle(graph))
+# graph = generate_euler_graph(9)
+# nx.draw_circular(graph, with_labels = True)
+# plt.show()
