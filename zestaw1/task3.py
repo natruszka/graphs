@@ -7,13 +7,14 @@ import networkx as nx
 import random as rng
 import itertools
 import numpy as np
+import matplotlib.pyplot as plt
 import time
 
 
 def G_n(n,l):
 #n - liczba wierzcholkow
 #l - liczba krawedzi
-  if l < 1 or n < l:
+  if l < 1 or (n*(n-1))//2 < l:
     raise ValueError
 
   G = nx.Graph()
@@ -67,7 +68,14 @@ def G_p(n, p):
 
 
 
-print(G_n(1000000,500000))
-start = time.process_time()
-print(G_p(10000,0.10))
-print(time.process_time() - start)
+#print(G_n(1000000,500000))
+#start = time.process_time()
+#print(G_p(10000,0.10))
+#print(time.process_time() - start)
+
+
+plt.subplot(1,2,1)
+nx.draw_circular(G_n(10,30))
+plt.subplot(1,2,2)
+nx.draw_circular(G_p(10,0.10))
+plt.show()
