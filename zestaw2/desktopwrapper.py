@@ -126,7 +126,7 @@ class PageOne(tk.Frame):
             if task1and2.check_if_degree_sequence(sequence_list):
                 self.plot1.clear()
                 graph = task1and2.create_graph_from_sequence(sequence_list)
-                nx.draw_circular(graph, ax=self.plot1, with_labels=True)
+                nx.draw_circular(graph, ax=self.plot1, with_labels=True, font_color="whitesmoke")
                 self.canvas.draw()
                 self.returned.set("Podany ciąg jest graficzny.")
             else:
@@ -191,7 +191,7 @@ class PageTwo(tk.Frame):
             if task1and2.check_if_degree_sequence(sequence_list):
                 self.plot1.clear()
                 random_graph = task1and2.randomize_edges(random_num, sequence_list)
-                nx.draw_circular(random_graph, ax=self.plot1, with_labels=True)
+                nx.draw_circular(random_graph, ax=self.plot1, with_labels=True, font_color="whitesmoke")
                 self.canvas.draw()
                 self.returned.set("Podany ciąg jest graficzny.")
             else:

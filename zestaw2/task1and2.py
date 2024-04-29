@@ -60,14 +60,14 @@ def swap_nodes(first_edge, second_edge, list_edges):
         return None, None
     if first_edge[0] == second_edge[1] or first_edge[1] == second_edge[0]: #sprawdzenie petli
         return None, None
-    if first_edge[0] == second_edge[0]: #zapobiega nieznaczacym permutacjom
-        return None, None
     return (first_edge[0],second_edge[1]),(first_edge[1],second_edge[0])
 
 def randomize_edges(random_amount: int, sequence: list) -> nx.Graph:
     if not check_if_degree_sequence(sequence):
         return None
     graph = create_graph_from_sequence(sequence)
+    if len(sequence) < 4:
+        return graph
     for _ in range(random_amount):
         list_edges = list(graph.edges)
         # print(list_edges)
