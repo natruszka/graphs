@@ -55,9 +55,9 @@ def relax(u, v, w):
 def qompare(done_list, all_vertices):
     return len(done_list) == len(all_vertices)
 
-def Dijkstra(graph, vertex=0):
+def Dijkstra(graph, vertex=1):
     queue = [[vertice, np.inf, np.nan] for vertice in graph.vertices]   # queueof all vertices
-    queue[vertex][1] = 0                                                
+    queue[vertex-1][1] = 0                                                
     done = []                                                           # vertices already relaxed
 
     while (not qompare(done, graph.vertices)):
@@ -90,6 +90,30 @@ def Undijkstrify(done, start):
         paths.append(path)
     return paths
 
+def Lengthify(paths, start, edges):
+    lengths = []
+    i = 1
+    for path in paths:
+        lenth = 0
+        curr = start
+        pc = path.copy()
+        pc.append(i)
+        for v in pc:
+            for edge in edges:
+                lenth += edge[2] if ((edge[0] == curr and edge[1] == v) or (edge[1] == curr and edge[0] == v)) else 0
+            curr = v
+        lengths.append(lenth)
+        i += 1
+    return lengths
+
+def Printify(paths, lengths, start):
+    i = 1
+    for path in paths:
+        if (i == start): print("Path to vertice nr. ", i, ": Starting vertice", "\n Length: ", lengths[i-1])
+        else: print("Path to vertice nr. ", i, ": ", " - ".join(list(map(str, path))), "-", i, "\n Length: ", lengths[i-1])
+        i+=1
+
+
 if __name__ == "__main__":
     MyGraph = prj.RGraph()
     MyGraph.randomize(vertice_count=7, edges_count=12)
@@ -108,6 +132,10 @@ if __name__ == "__main__":
 
     Draw(MyGraph, vertices_not_ready, vertice_processed, vertices_ready, edges_not_ready, edges_processed, edges_ready, ds, ps)
 
-    done = Dijkstra(MyGraph)
-    print(done)
-    print(Undijkstrify(done, 1))
+    starting = 1
+
+    done = Dijkstra(MyGraph, starting)
+    paths = Undijkstrify(done, starting)
+    lengths = Lengthify(paths, starting , MyGraph.edges)
+    
+    Printify(paths, lengths, starting)
