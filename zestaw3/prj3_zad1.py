@@ -1,7 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 from random import randint
-import igraph as ig
 import numpy as np
 
 class RGraph():

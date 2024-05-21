@@ -123,7 +123,7 @@ class RGraph():
 
 
 RG = RGraph()
-RG.graph_from_file("input.txt", "Adjacency matrix")
+RG.graph_from_file("input.txt", "Adjacency list")
 RG.print()
 
 RG.to_adjacency_matrix()

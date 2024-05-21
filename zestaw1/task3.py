@@ -75,7 +75,7 @@ def G_p(n, p):
 
 
 plt.subplot(1,2,1)
-nx.draw_circular(G_n(10,30))
+nx.draw_circular(G_n(11,54))
 plt.subplot(1,2,2)
-nx.draw_circular(G_p(10,0.10))
+nx.draw_circular(G_p(11,1))
 plt.show()
