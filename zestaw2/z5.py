@@ -82,8 +82,10 @@ def generate_random_regular_graph(n: int, k: int):
         graph = nx.Graph()
 
     return graph 
-#nx.draw_circular(generate_random_regular_graph(10,3))
-#plt.show()
+    
+if __name__ == '__main__':
+	nx.draw_circular(generate_random_regular_graph(10,3))
+	plt.show()
 
 
 

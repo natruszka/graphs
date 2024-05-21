@@ -21,6 +21,8 @@ class RGraph():
         return False
     
     def randomize(self, vertice_count=12, edges_count=20, edgeweight_start=1, edgeweight_end=10):
+        if edges_count >= (vertice_count*(vertice_count-1)/2): raise Exception("The number of edges provided is impossible. Please reduce the number of vertices or add mroe dimensions.")
+
         self.vertices = list(range(1, vertice_count+1))
         self.edges = []
         while len(self.edges) < edges_count:

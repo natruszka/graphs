@@ -2,9 +2,6 @@ import prj3_zad1 as prj
 import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
-#from random import choice
-from collections import Counter
-
 
 def Draw(graph,
         vertices_not_ready, vertice_processed, vertices_ready,
@@ -12,7 +9,6 @@ def Draw(graph,
         ds, ps):
 
     # Drawing part
-
     vertice_colours = ["red" if vertice == vertice_processed else ("green" if vertice in vertices_ready else "blue") for vertice in graph.vertices]
     edge_colours = ["black" if edge in edges_ready else ("green" if edge in edges_processed else "grey") for edge in graph.edges]
 
@@ -39,6 +35,7 @@ def Draw(graph,
 
     plt.show()
 
+# function to check if vertice_1 is a neighbour of vertice_2 (or vice versa)
 def is_neighbour(vertice_1, vertice_2, edges):
     for edge in edges:
         if((edge[0] == vertice_1) and (edge[1] == vertice_2) 
@@ -47,29 +44,27 @@ def is_neighbour(vertice_1, vertice_2, edges):
     else:
         return None
 
+# relaxation for the Dijkstra algorythm
 def relax(u, v, w):
     if v[1] > u[1] + w:
         v[1] = u[1] + w
         v[2] = u[0]
     return v
 
+# I forgot what that was for
 def qompare(done_list, all_vertices):
     return len(done_list) == len(all_vertices)
 
-def Dijkstra(graph, vertex=0):
-    queue = [[vertice, np.inf, np.nan] for vertice in graph.vertices]
-    queue[vertex][1] = 0
-    done = []
-    
-    #vertices_not_ready = sorted(MyGraph.vertices.copy())
-    #edges_not_ready = MyGraph.edges.copy()
+def Dijkstra(graph, vertex=1):
+    queue = [[vertice, np.inf, np.nan] for vertice in graph.vertices]   # queueof all vertices
+    queue[vertex-1][1] = 0                                                
+    done = []                                                           # vertices already relaxed
 
     while (not qompare(done, graph.vertices)):
         min_ = queue[0]
         for item in queue:
             min_ = item if item[1] < min_[1] else min_
 
-        print(min_)
         done.append(queue.pop(queue.index(min_)))
 
         for i in range(len(queue)):
@@ -80,6 +75,9 @@ def Dijkstra(graph, vertex=0):
 
     return done
 
+## function to return the shortest paths from vertice 0 to other vertices
+## returns a list of lists. Each of the lists contains a number of vertices 
+## following the path from the first, excluding the first vertice itself   
 def Undijkstrify(done, start):
     paths = []
     for i in range(len(done)):
@@ -92,24 +90,52 @@ def Undijkstrify(done, start):
         paths.append(path)
     return paths
 
-MyGraph = prj.RGraph()
-MyGraph.randomize(vertice_count=7, edges_count=12)
+def Lengthify(paths, start, edges):
+    lengths = []
+    i = 1
+    for path in paths:
+        lenth = 0
+        curr = start
+        pc = path.copy()
+        pc.append(i)
+        for v in pc:
+            for edge in edges:
+                lenth += edge[2] if ((edge[0] == curr and edge[1] == v) or (edge[1] == curr and edge[0] == v)) else 0
+            curr = v
+        lengths.append(lenth)
+        i += 1
+    return lengths
 
-vertices_not_ready = sorted(MyGraph.vertices.copy())
-vertice_processed = 0
-vertices_ready = []
-
-edges_not_ready = MyGraph.edges.copy()
-edges_processed = MyGraph.edges.copy()
-edges_ready = []
-
-ds = [np.inf for _ in range(len(MyGraph.vertices))]
-ps = [np.nan for _ in range(len(MyGraph.vertices))]
-ds[0] = 0
-
-Draw(MyGraph, vertices_not_ready, vertice_processed, vertices_ready, edges_not_ready, edges_processed, edges_ready, ds, ps)
+def Printify(paths, lengths, start):
+    i = 1
+    for path in paths:
+        if (i == start): print("Path to vertice nr. ", i, ": Starting vertice", "\n Length: ", lengths[i-1])
+        else: print("Path to vertice nr. ", i, ": ", " - ".join(list(map(str, path))), "-", i, "\n Length: ", lengths[i-1])
+        i+=1
 
 
-done = Dijkstra(MyGraph)
-print(done)
-print(Undijkstrify(done, 1))
+if __name__ == "__main__":
+    MyGraph = prj.RGraph()
+    MyGraph.randomize(vertice_count=7, edges_count=12)
+
+    vertices_not_ready = sorted(MyGraph.vertices.copy())
+    vertice_processed = 0
+    vertices_ready = []
+
+    edges_not_ready = MyGraph.edges.copy()
+    edges_processed = MyGraph.edges.copy()
+    edges_ready = []
+
+    ds = [np.inf for _ in range(len(MyGraph.vertices))]
+    ps = [np.nan for _ in range(len(MyGraph.vertices))]
+    ds[0] = 0
+
+    Draw(MyGraph, vertices_not_ready, vertice_processed, vertices_ready, edges_not_ready, edges_processed, edges_ready, ds, ps)
+
+    starting = 1
+
+    done = Dijkstra(MyGraph, starting)
+    paths = Undijkstrify(done, starting)
+    lengths = Lengthify(paths, starting , MyGraph.edges)
+    
+    Printify(paths, lengths, starting)
