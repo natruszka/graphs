@@ -9,8 +9,8 @@ def print_matrix(matrix):
 def random_digraph(nodes: int, probability: float)->nx.Graph:
     if probability > 1 or probability < 0:
         raise ValueError("Prawdopodobieństwo nie może być mniejsze od 0 lub większe od 1.")
-    if nodes < 1:
-        raise ValueError("Ilość wierzchołków musi być większa od 0.")
+    if nodes < 1 or nodes > 50:
+        raise ValueError("Ilość wierzchołków musi być większa od 0 lub mniejsza niz 50.")
     graph = nx.DiGraph()
     graph.add_nodes_from(range(1, nodes+1))
     for node in graph.nodes:
@@ -48,9 +48,11 @@ def graph_to_incidence_matrix(graph: nx.DiGraph):
         
     return incidence_matrix
 
-graph = random_digraph(5, 1)
-print(graph_to_adjency_list(graph))
-print_matrix(graph_to_adjency_matrix(graph))
-print_matrix(graph_to_incidence_matrix(graph))
-nx.draw_circular(graph, with_labels = True, font_color="whitesmoke")
-plt.show()
+
+if __name__ == "__main__":
+    graph = random_digraph(5, 1)
+    print(graph_to_adjency_list(graph))
+    print_matrix(graph_to_adjency_matrix(graph))
+    print_matrix(graph_to_incidence_matrix(graph))
+    nx.draw_circular(graph, with_labels = True, font_color="whitesmoke")
+    plt.show()
