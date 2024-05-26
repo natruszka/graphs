@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pl-PL" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wybór Zadania</title>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .hero-section {
+            background-color: #007bff;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        .hero-section h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .hero-section p {
+            font-size: 20px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<section class="hero-section">
+    <div class="container">
+        <h1>Zestaw 6</h1>
+
+    </div>
+</section>
+
+<div class="container" id="exercises">
+    <div class="row text-center my-5">
+        <h1 class="mb-5">Wybierz zadanie</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Algorytm PageRank</b></h5>
+                    <p class="card-text">
+                        Implementacja algorytmu PageRank dla digrafu za pomocą błądzenia przypadkowego i metody iteracji wektora obsadzeń.
+                    </p>
+                    <a th:href="@{/pagerank}" class="btn btn-primary">Wczytaj Zadanie 1</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><b>Najkrótsza Zamknięta Droga - Wyżarzanie Symulowane</b></h5>
+                    <p class="card-text">
+                        Implementacja algorytm do wyszukiwania możliwie najkrótszej zamkniętej drogi przechodzącej przez wszystkie zadane wierzchołki rozrzucone na planszy kwadratowej. Wykorzystuje metodę symulowanego wyżarzania opartą o łańcuch Markowa, którego pojedyncze kroki są wykonywane jako operacje 2-opt zgodnie z algorytmem Metropolisa-Hastingsa.
+                    </p>
+                    <a th:href="@{/tsp}" class="btn btn-primary">Wczytaj Zadanie 2</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

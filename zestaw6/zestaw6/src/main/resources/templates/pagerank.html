@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl-PL">
+<head>
+  <title>PageRank Results</title>
+  <link th:href="@{/css/bootstrap4.min.css}" rel="stylesheet">
+  <script th:src="@{/js/d3.v6.min.js}"></script>
+  <style>
+    .node circle {
+      fill: steelblue;
+      cursor: pointer;
+    }
+    .node text {
+      font: 12px sans-serif;
+    }
+    .link {
+      fill: none;
+      stroke: #999;
+      stroke-opacity: 0.6;
+      stroke-width: 1.5px;
+      marker-end: url(#arrow);
+    }
+    .arrowHead {
+      fill: #999;
+    }
+    .graph-container {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="mt-4 mb-4">Zadanie 1 </h1>
+  <div class="mb-4">
+    <a href="/" class="btn btn-outline-secondary">Powrót</a>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <form action="#" th:action="@{/pagerank}" th:object="${graphForm}" method="post" class="form-group">
+        <div class="form-group">
+          <label for="graphData">Lista sąsiedztwa:</label>
+          <textarea id="graphData" name="graphData" rows="10" cols="50" th:field="*{graphData}" class="form-control"></textarea>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Załaduj graf</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <form action="#" th:action="@{/pagerank/random}" method="post" class="form-group">
+        <div class="form-group">
+          <label for="vertices">Liczba wierzchołków:</label>
+          <input type="number" id="vertices" name="vertices" min="1" max="100" value="5" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="edges">Liczba krawędzi:</label>
+          <input type="number" id="edges" name="edges" min="1" max="100" value="10" class="form-control">
+        </div>
+        <div>
+          <button type="submit" class="btn btn-secondary">Wylosuj graf</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <h2 class="mb-4">Wizualizacja:</h2>
+  <div id="graph" class="graph-container mb-4"></div>
+
+  <h2 class="mb-4">PageRank: </h2>
+  <div class="container">
+    <form action="#" th:action="@{/pagerank/calculate}" method="post" class="form-group">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="iterations">Maksymalna liczba iteracji:</label>
+            <input type="number" id="iterations" name="iterations" min="1" value="100" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="steps">Liczba kroków:</label>
+            <input type="number" id="steps" name="steps" min="1" value="1000000" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="steps">Prawdopodobieństwo teleportacji:</label>
+            <input type="number" id="tel_prob" name="tel_prob" min="0" max="1" value="0.15" step="0.01" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-outline-primary">Policz</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Metoda potęgowa</h3>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Węzeł</th>
+          <th>PageRank</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${pagerankIterative}">
+          <td th:text="${entry.key}">Node</td>
+          <td th:text="${entry.value}">PageRank</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <h3>Błądzenie przypadkowe</h3>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Węzeł</th>
+          <th>PageRank</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${pagerankRandomWalk}">
+          <td th:text="${entry.key}">Node</td>
+          <td th:text="${entry.value}">PageRank</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  var nodes = /*[[${nodes}]]*/ [];
+  var links = /*[[${links}]]*/ [];
+
+  var width = 960, height = 600;
+
+  var svg = d3.select("#graph").append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+  // Define arrow marker
+  svg.append("defs").append("marker")
+          .attr("id", "arrow")
+          .attr("viewBox", "0 -5 10 10")
+          .attr("refX", 15)
+          .attr("refY", 0)
+          .attr("markerWidth", 6)
+          .attr("markerHeight", 6)
+          .attr("orient", "auto")
+          .append("path")
+          .attr("d", "M0,-5L10,0L0,5")
+          .attr("class", "arrowHead");
+
+  var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+  var simulation = d3.forceSimulation()
+          .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(100))
+          .force("charge", d3.forceManyBody().strength(-300))
+          .force("center", d3.forceCenter(width / 2, height / 2));
+
+  var link = svg.append("g")
+          .attr("class", "links")
+          .selectAll("line")
+          .data(links)
+          .enter().append("line")
+          .attr("class", "link");
+
+  var node = svg.append("g")
+          .attr("class", "nodes")
+          .selectAll("g")
+          .data(nodes)
+          .enter().append("g")
+          .call(d3.drag()
+                  .on("start", dragstarted)
+                  .on("drag", dragged)
+                  .on("end", dragended));
+
+  node.append("circle")
+          .attr("r", 10)
+          .attr("fill", function(d) { return color(d.group); });
+
+  node.append("text")
+          .attr("x", 12)
+          .attr("dy", ".35em")
+          .text(function(d) { return d.id; });
+
+  simulation
+          .nodes(nodes)
+          .on("tick", ticked);
+
+  simulation.force("link")
+          .links(links);
+
+  function ticked() {
+    link
+            .attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+    node
+            .attr("transform", function(d) {
+              return "translate(" + d.x + "," + d.y + ")";
+            });
+  }
+
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
+  }
+  /*]]>*/
+</script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl-PL">
+<head>
+  <meta charset="UTF-8">
+  <title>Zadanie 2</title>
+  <link th:href="@{/css/bootstrap4.min.css}" rel="stylesheet">
+  <script th:src="@{/js/d3.v6.min.js}"></script>
+  <style>
+    .chart {
+      margin: 20px auto;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 class="mt-5">Zadanie 2</h1>
+  <div class="mb-4">
+    <a href="/tsp" class="btn btn-outline-secondary">Powrót</a>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Cykl początkowy</h3>
+      <div id="initialChart" class="chart"></div>
+      <p><strong>Długość cyklu początkowego: </strong> <span th:text="${initialLength}"></span></p>
+    </div>
+    <div class="col-md-12">
+      <h3>Cykl końcowy</h3>
+      <div id="finalChart" class="chart"></div>
+      <p><strong>Długość cyklu końcowego: </strong> <span th:text="${finalLength}"></span></p>
+    </div>
+  </div>
+</div>
+<script th:inline="javascript">
+  var coordinates = [[${coordinates}]];
+  var initialPath = [[${initialPath}]];
+  var finalPath = [[${finalPath}]];
+
+  function plotPath(path, elementId) {
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+            width = 900 - margin.left - margin.right,
+            height = 600 - margin.top - margin.bottom;
+
+    var svg = d3.select(elementId).append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var xScale = d3.scaleLinear().domain([0, d3.max(coordinates, function(d) { return d[0]; })]).range([0, width]);
+    var yScale = d3.scaleLinear().domain([0, d3.max(coordinates, function(d) { return d[1]; })]).range([height, 0]);
+
+    var line = d3.line()
+            .x(function(d) { return xScale(d[0]); })
+            .y(function(d) { return yScale(d[1]); });
+
+    var points = path.map(function(i) {
+      return coordinates[i];
+    });
+
+    points.push(points[0]);  // Close the cycle
+
+    svg.append("path")
+            .datum(points)
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 2)
+            .attr("d", line);
+
+    svg.selectAll("circle")
+            .data(points)
+            .enter().append("circle")
+            .attr("cx", function(d) { return xScale(d[0]); })
+            .attr("cy", function(d) { return yScale(d[1]); })
+            .attr("r", 5)
+            .attr("fill", "red");
+
+    svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale));
+
+    svg.append("g")
+            .call(d3.axisLeft(yScale));
+  }
+
+  plotPath(initialPath, "#initialChart");
+  plotPath(finalPath, "#finalChart");
+</script>
+</body>
+</html>

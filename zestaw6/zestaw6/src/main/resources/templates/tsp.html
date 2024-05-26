@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl-PL">
+<head>
+  <meta charset="UTF-8">
+  <title>Zadanie 2</title>
+  <link th:href="@{/css/bootstrap4.min.css}" rel="stylesheet">
+<body>
+<div class="container">
+  <h1 class="mt-5">Zadanie 2</h1>
+  <div class="mb-4">
+    <a href="/" class="btn btn-outline-secondary">Powrót</a>
+  </div>
+  <form method="post" action="tsp/upload" enctype="multipart/form-data" id="uploadForm">
+    <div class="form-group">
+      <label for="file">Wybierz plik ze współrzędnymi:</label>
+      <input type="file" class="form-control-file" id="file" name="file" required>
+    </div>
+    <button type="submit" class="btn btn-primary" id="submitButton">Oblicz</button>
+  </form>
+</div>
+<script>
+  document.getElementById("uploadForm").addEventListener("submit", function() {
+    document.getElementById("submitButton").disabled = true;
+    document.getElementById("submitButton").innerHTML = 'Obliczanie... <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+  });
+</script>
+</body>
+</html>
